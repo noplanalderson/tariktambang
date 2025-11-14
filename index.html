@@ -12,568 +12,561 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-      // PASTE KODE REACT DARI ARTIFACT DI SINI
-      import React, { useState, useEffect } from 'react';
-      import { Trophy, AlertCircle, Zap } from 'lucide-react';
+        const { useState } = React;
+        const { Trophy, AlertCircle, Zap } = lucideReact || {};
 
-      const TugOfWarGame = () => {
-        const [questions, setQuestions] = useState([
-          {
-            id: 1,
-            question: "Apa kepanjangan dari LAN?",
-            options: ["Local Area Network", "Large Area Network", "Line Area Network", "Link Area Network"],
-            correct: 0,
-            tujuanABCD: {
-              audience: "Siswa SMP kelas 7",
-              behavior: "dapat menjelaskan pengertian dan jenis-jenis jaringan komputer",
-              condition: "setelah mempelajari materi jaringan komputer",
-              degree: "dengan tepat minimal 3 dari 4 karakteristik LAN"
-            }
-          },
-          {
-            id: 2,
-            question: "Perangkat yang berfungsi menghubungkan beberapa komputer dalam satu jaringan adalah...",
-            options: ["Monitor", "Switch", "Mouse", "Keyboard"],
-            correct: 1,
-            tujuanABCD: {
-              audience: "Siswa SMP kelas 7",
-              behavior: "dapat mengidentifikasi perangkat keras jaringan komputer",
-              condition: "ketika diberikan gambar atau deskripsi perangkat",
-              degree: "dengan akurasi minimal 80%"
-            }
-          },
-          {
-            id: 3,
-            question: "Internet adalah singkatan dari...",
-            options: ["Internal Network", "Interconnected Network", "International Network", "Interactive Network"],
-            correct: 1,
-            tujuanABCD: {
-              audience: "Siswa SMP kelas 7",
-              behavior: "dapat menjelaskan konsep dasar internet",
-              condition: "melalui diskusi kelompok",
-              degree: "dengan menyebutkan minimal 3 karakteristik utama internet"
-            }
-          },
-          {
-            id: 4,
-            question: "Protokol yang digunakan untuk mengirim dan menerima email adalah...",
-            options: ["HTTP", "FTP", "SMTP", "DNS"],
-            correct: 2,
-            tujuanABCD: {
-              audience: "Siswa SMP kelas 7",
-              behavior: "dapat membedakan berbagai protokol internet",
-              condition: "dalam konteks penggunaan sehari-hari",
-              degree: "dengan benar minimal 7 dari 10 protokol"
-            }
-          },
-          {
-            id: 5,
-            question: "Alamat IP versi 4 (IPv4) terdiri dari berapa bit?",
-            options: ["16 bit", "32 bit", "64 bit", "128 bit"],
-            correct: 1,
-            tujuanABCD: {
-              audience: "Siswa SMP kelas 7",
-              behavior: "dapat menjelaskan sistem pengalamatan IP",
-              condition: "setelah praktik konfigurasi jaringan sederhana",
-              degree: "dengan menyebutkan struktur dan format yang benar"
-            }
-          },
-          {
-            id: 6,
-            question: "Topologi jaringan yang berbentuk lingkaran disebut...",
-            options: ["Topologi Bus", "Topologi Star", "Topologi Ring", "Topologi Mesh"],
-            correct: 2,
-            tujuanABCD: {
-              audience: "Siswa SMP kelas 7",
-              behavior: "dapat mengidentifikasi berbagai topologi jaringan",
-              condition: "melalui gambar dan diagram",
-              degree: "dengan akurasi 100% untuk 4 topologi dasar"
-            }
-          },
-          {
-            id: 7,
-            question: "WWW adalah singkatan dari...",
-            options: ["Wide World Web", "World Wide Web", "World Web Wide", "Web World Wide"],
-            correct: 1,
-            tujuanABCD: {
-              audience: "Siswa SMP kelas 7",
-              behavior: "dapat menjelaskan layanan-layanan internet",
-              condition: "dalam presentasi kelompok",
-              degree: "dengan menyebutkan minimal 5 layanan dan fungsinya"
-            }
-          },
-          {
-            id: 8,
-            question: "Perangkat yang menghubungkan jaringan lokal dengan internet adalah...",
-            options: ["Hub", "Router", "Switch", "Bridge"],
-            correct: 1,
-            tujuanABCD: {
-              audience: "Siswa SMP kelas 7",
-              behavior: "dapat membedakan fungsi perangkat keras jaringan",
-              condition: "ketika diberikan skenario kasus nyata",
-              degree: "dengan tepat minimal 4 dari 5 perangkat"
-            }
-          },
-          {
-            id: 9,
-            question: "Kabel jaringan yang paling umum digunakan saat ini adalah...",
-            options: ["Kabel Coaxial", "Kabel Fiber Optik", "Kabel UTP", "Kabel HDMI"],
-            correct: 2,
-            tujuanABCD: {
-              audience: "Siswa SMP kelas 7",
-              behavior: "dapat mengidentifikasi media transmisi jaringan",
-              condition: "melalui observasi langsung di lab komputer",
-              degree: "dengan benar untuk 3 jenis media transmisi"
-            }
-          },
-          {
-            id: 10,
-            question: "Bandwidth adalah...",
-            options: [
-              "Jarak antar komputer",
-              "Kecepatan transfer data dalam jaringan",
-              "Jenis kabel jaringan",
-              "Nama perangkat jaringan"
-            ],
-            correct: 1,
-            tujuanABCD: {
-              audience: "Siswa SMP kelas 7",
-              behavior: "dapat menjelaskan konsep bandwidth dan kecepatan jaringan",
-              condition: "dalam situasi troubleshooting sederhana",
-              degree: "dengan menyebutkan faktor-faktor yang mempengaruhinya"
-            }
-          }
-        ]);
+        // Fallback icons jika lucide tidak load
+        const TrophyIcon = Trophy || (() => <span>🏆</span>);
+        const AlertCircleIcon = AlertCircle || (() => <span>ℹ️</span>);
+        const ZapIcon = Zap || (() => <span>⚡</span>);
 
-        const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-        const [selectedAnswer, setSelectedAnswer] = useState(null);
-        const [score, setScore] = useState({ team1: 0, team2: 0 });
-        const [ropePosition, setRopePosition] = useState(50);
-        const [gameStatus, setGameStatus] = useState('playing');
-        const [showFeedback, setShowFeedback] = useState(false);
-        const [isCorrect, setIsCorrect] = useState(false);
-        const [showTujuan, setShowTujuan] = useState(false);
-        const [buzzedTeam, setBuzzedTeam] = useState(null);
-        const [canBuzz, setCanBuzz] = useState(true);
-        const [teamNames, setTeamNames] = useState({ team1: 'Kelompok 1', team2: 'Kelompok 2' });
+        const TugOfWarGame = () => {
+          const [questions, setQuestions] = useState([
+            {
+              id: 1,
+              question: "Apa kepanjangan dari LAN?",
+              options: ["Local Area Network", "Large Area Network", "Line Area Network", "Link Area Network"],
+              correct: 0,
+              tujuanABCD: {
+                audience: "Siswa SMP kelas 7",
+                behavior: "dapat menjelaskan pengertian dan jenis-jenis jaringan komputer",
+                condition: "setelah mempelajari materi jaringan komputer",
+                degree: "dengan tepat minimal 3 dari 4 karakteristik LAN"
+              }
+            },
+            {
+              id: 2,
+              question: "Perangkat yang berfungsi menghubungkan beberapa komputer dalam satu jaringan adalah...",
+              options: ["Monitor", "Switch", "Mouse", "Keyboard"],
+              correct: 1,
+              tujuanABCD: {
+                audience: "Siswa SMP kelas 7",
+                behavior: "dapat mengidentifikasi perangkat keras jaringan komputer",
+                condition: "ketika diberikan gambar atau deskripsi perangkat",
+                degree: "dengan akurasi minimal 80%"
+              }
+            },
+            {
+              id: 3,
+              question: "Internet adalah singkatan dari...",
+              options: ["Internal Network", "Interconnected Network", "International Network", "Interactive Network"],
+              correct: 1,
+              tujuanABCD: {
+                audience: "Siswa SMP kelas 7",
+                behavior: "dapat menjelaskan konsep dasar internet",
+                condition: "melalui diskusi kelompok",
+                degree: "dengan menyebutkan minimal 3 karakteristik utama internet"
+              }
+            },
+            {
+              id: 4,
+              question: "Protokol yang digunakan untuk mengirim dan menerima email adalah...",
+              options: ["HTTP", "FTP", "SMTP", "DNS"],
+              correct: 2,
+              tujuanABCD: {
+                audience: "Siswa SMP kelas 7",
+                behavior: "dapat membedakan berbagai protokol internet",
+                condition: "dalam konteks penggunaan sehari-hari",
+                degree: "dengan benar minimal 7 dari 10 protokol"
+              }
+            },
+            {
+              id: 5,
+              question: "Alamat IP versi 4 (IPv4) terdiri dari berapa bit?",
+              options: ["16 bit", "32 bit", "64 bit", "128 bit"],
+              correct: 1,
+              tujuanABCD: {
+                audience: "Siswa SMP kelas 7",
+                behavior: "dapat menjelaskan sistem pengalamatan IP",
+                condition: "setelah praktik konfigurasi jaringan sederhana",
+                degree: "dengan menyebutkan struktur dan format yang benar"
+              }
+            },
+            {
+              id: 6,
+              question: "Topologi jaringan yang berbentuk lingkaran disebut...",
+              options: ["Topologi Bus", "Topologi Star", "Topologi Ring", "Topologi Mesh"],
+              correct: 2,
+              tujuanABCD: {
+                audience: "Siswa SMP kelas 7",
+                behavior: "dapat mengidentifikasi berbagai topologi jaringan",
+                condition: "melalui gambar dan diagram",
+                degree: "dengan akurasi 100% untuk 4 topologi dasar"
+              }
+            },
+            {
+              id: 7,
+              question: "WWW adalah singkatan dari...",
+              options: ["Wide World Web", "World Wide Web", "World Web Wide", "Web World Wide"],
+              correct: 1,
+              tujuanABCD: {
+                audience: "Siswa SMP kelas 7",
+                behavior: "dapat menjelaskan layanan-layanan internet",
+                condition: "dalam presentasi kelompok",
+                degree: "dengan menyebutkan minimal 5 layanan dan fungsinya"
+              }
+            },
+            {
+              id: 8,
+              question: "Perangkat yang menghubungkan jaringan lokal dengan internet adalah...",
+              options: ["Hub", "Router", "Switch", "Bridge"],
+              correct: 1,
+              tujuanABCD: {
+                audience: "Siswa SMP kelas 7",
+                behavior: "dapat membedakan fungsi perangkat keras jaringan",
+                condition: "ketika diberikan skenario kasus nyata",
+                degree: "dengan tepat minimal 4 dari 5 perangkat"
+              }
+            },
+            {
+              id: 9,
+              question: "Kabel jaringan yang paling umum digunakan saat ini adalah...",
+              options: ["Kabel Coaxial", "Kabel Fiber Optik", "Kabel UTP", "Kabel HDMI"],
+              correct: 2,
+              tujuanABCD: {
+                audience: "Siswa SMP kelas 7",
+                behavior: "dapat mengidentifikasi media transmisi jaringan",
+                condition: "melalui observasi langsung di lab komputer",
+                degree: "dengan benar untuk 3 jenis media transmisi"
+              }
+            },
+            {
+              id: 10,
+              question: "Bandwidth adalah...",
+              options: [
+                "Jarak antar komputer",
+                "Kecepatan transfer data dalam jaringan",
+                "Jenis kabel jaringan",
+                "Nama perangkat jaringan"
+              ],
+              correct: 1,
+              tujuanABCD: {
+                audience: "Siswa SMP kelas 7",
+                behavior: "dapat menjelaskan konsep bandwidth dan kecepatan jaringan",
+                condition: "dalam situasi troubleshooting sederhana",
+                degree: "dengan menyebutkan faktor-faktor yang mempengaruhinya"
+              }
+            }
+          ]);
 
-        const currentQuestion = questions[currentQuestionIndex];
+          const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+          const [selectedAnswer, setSelectedAnswer] = useState(null);
+          const [score, setScore] = useState({ team1: 0, team2: 0 });
+          const [ropePosition, setRopePosition] = useState(50);
+          const [gameStatus, setGameStatus] = useState('playing');
+          const [showFeedback, setShowFeedback] = useState(false);
+          const [isCorrect, setIsCorrect] = useState(false);
+          const [showTujuan, setShowTujuan] = useState(false);
+          const [buzzedTeam, setBuzzedTeam] = useState(null);
+          const [canBuzz, setCanBuzz] = useState(true);
+          const [teamNames, setTeamNames] = useState({ team1: 'Kelompok 1', team2: 'Kelompok 2' });
 
-        const playBuzzSound = (team) => {
-          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          const oscillator = audioContext.createOscillator();
-          const gainNode = audioContext.createGain();
-          
-          oscillator.connect(gainNode);
-          gainNode.connect(audioContext.destination);
-          
-          // Suara berbeda untuk tiap team
-          oscillator.frequency.value = team === 'team1' ? 800 : 600;
-          oscillator.type = 'square';
-          
-          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-          
-          oscillator.start(audioContext.currentTime);
-          oscillator.stop(audioContext.currentTime + 0.3);
-        };
+          const currentQuestion = questions[currentQuestionIndex];
 
-        const handleBuzz = (team) => {
-          if (!canBuzz || buzzedTeam) return;
-          
-          playBuzzSound(team);
-          setBuzzedTeam(team);
-          setCanBuzz(false);
-        };
+          const playBuzzSound = (team) => {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = team === 'team1' ? 800 : 600;
+            oscillator.type = 'square';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+          };
 
-        const handleAnswer = (index) => {
-          if (showFeedback || !buzzedTeam) return;
-          
-          setSelectedAnswer(index);
-          const correct = index === currentQuestion.correct;
-          setIsCorrect(correct);
-          setShowFeedback(true);
+          const handleBuzz = (team) => {
+            if (!canBuzz || buzzedTeam) return;
+            
+            playBuzzSound(team);
+            setBuzzedTeam(team);
+            setCanBuzz(false);
+          };
 
-          if (correct) {
-            setScore(prev => ({ ...prev, [buzzedTeam]: prev[buzzedTeam] + 1 }));
-            setRopePosition(prev => buzzedTeam === 'team1' ? Math.min(prev + 10, 100) : Math.max(prev - 10, 0));
-          } else {
-            // Jika salah, team lain dapat kesempatan
-            const otherTeam = buzzedTeam === 'team1' ? 'team2' : 'team1';
-            setBuzzedTeam(otherTeam);
-            setShowFeedback(false);
-            setSelectedAnswer(null);
-            return;
-          }
+          const handleAnswer = (index) => {
+            if (showFeedback || !buzzedTeam) return;
+            
+            setSelectedAnswer(index);
+            const correct = index === currentQuestion.correct;
+            setIsCorrect(correct);
+            setShowFeedback(true);
 
-          setTimeout(() => {
-            if (currentQuestionIndex < questions.length - 1) {
-              setCurrentQuestionIndex(prev => prev + 1);
-              setSelectedAnswer(null);
-              setShowFeedback(false);
-              setShowTujuan(false);
-              setBuzzedTeam(null);
-              setCanBuzz(true);
+            if (correct) {
+              setScore(prev => ({ ...prev, [buzzedTeam]: prev[buzzedTeam] + 1 }));
+              setRopePosition(prev => buzzedTeam === 'team1' ? Math.min(prev + 10, 100) : Math.max(prev - 10, 0));
             } else {
-              setGameStatus('finished');
+              const otherTeam = buzzedTeam === 'team1' ? 'team2' : 'team1';
+              setBuzzedTeam(otherTeam);
+              setShowFeedback(false);
+              setSelectedAnswer(null);
+              return;
             }
-          }, 2500);
-        };
 
-        const resetGame = () => {
-          setCurrentQuestionIndex(0);
-          setSelectedAnswer(null);
-          setScore({ team1: 0, team2: 0 });
-          setRopePosition(50);
-          setGameStatus('playing');
-          setShowFeedback(false);
-          setShowTujuan(false);
-          setBuzzedTeam(null);
-          setCanBuzz(true);
-        };
+            setTimeout(() => {
+              if (currentQuestionIndex < questions.length - 1) {
+                setCurrentQuestionIndex(prev => prev + 1);
+                setSelectedAnswer(null);
+                setShowFeedback(false);
+                setShowTujuan(false);
+                setBuzzedTeam(null);
+                setCanBuzz(true);
+              } else {
+                setGameStatus('finished');
+              }
+            }, 2500);
+          };
 
-        const handleEditQuestion = (id, field, value) => {
-          setQuestions(prev => prev.map(q => 
-            q.id === id ? { ...q, [field]: value } : q
-          ));
-        };
+          const resetGame = () => {
+            setCurrentQuestionIndex(0);
+            setSelectedAnswer(null);
+            setScore({ team1: 0, team2: 0 });
+            setRopePosition(50);
+            setGameStatus('playing');
+            setShowFeedback(false);
+            setShowTujuan(false);
+            setBuzzedTeam(null);
+            setCanBuzz(true);
+          };
 
-        const handleEditOption = (qId, optIndex, value) => {
-          setQuestions(prev => prev.map(q => 
-            q.id === qId ? {
-              ...q,
-              options: q.options.map((opt, i) => i === optIndex ? value : opt)
-            } : q
-          ));
-        };
+          const handleEditQuestion = (id, field, value) => {
+            setQuestions(prev => prev.map(q => 
+              q.id === id ? { ...q, [field]: value } : q
+            ));
+          };
 
-        const handleEditTujuan = (qId, field, value) => {
-          setQuestions(prev => prev.map(q => 
-            q.id === qId ? {
-              ...q,
-              tujuanABCD: { ...q.tujuanABCD, [field]: value }
-            } : q
-          ));
-        };
+          const handleEditOption = (qId, optIndex, value) => {
+            setQuestions(prev => prev.map(q => 
+              q.id === qId ? {
+                ...q,
+                options: q.options.map((opt, i) => i === optIndex ? value : opt)
+              } : q
+            ));
+          };
 
-        if (gameStatus === 'editing') {
-          return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-              <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">Edit Soal & Tujuan Pembelajaran</h2>
-                
-                {questions.map((q, qIndex) => (
-                  <div key={q.id} className="mb-8 p-4 border-2 border-gray-200 rounded-lg">
-                    <h3 className="font-bold text-lg mb-3">Soal {q.id}</h3>
-                    
-                    <label className="block mb-2 text-sm font-medium">Pertanyaan:</label>
-                    <textarea
-                      value={q.question}
-                      onChange={(e) => handleEditQuestion(q.id, 'question', e.target.value)}
-                      className="w-full p-2 border rounded mb-4"
-                      rows="2"
-                    />
+          const handleEditTujuan = (qId, field, value) => {
+            setQuestions(prev => prev.map(q => 
+              q.id === qId ? {
+                ...q,
+                tujuanABCD: { ...q.tujuanABCD, [field]: value }
+              } : q
+            ));
+          };
 
-                    <label className="block mb-2 text-sm font-medium">Pilihan Jawaban:</label>
-                    {q.options.map((opt, i) => (
-                      <div key={i} className="flex items-center gap-2 mb-2">
-                        <span className="font-medium w-6">{String.fromCharCode(65 + i)}.</span>
-                        <input
-                          type="text"
-                          value={opt}
-                          onChange={(e) => handleEditOption(q.id, i, e.target.value)}
-                          className="flex-1 p-2 border rounded"
-                        />
-                        {i === q.correct && (
-                          <span className="text-green-600 font-bold">✓ Benar</span>
-                        )}
-                      </div>
-                    ))}
-
-                    <label className="block mt-4 mb-2 text-sm font-medium">Jawaban Benar:</label>
-                    <select
-                      value={q.correct}
-                      onChange={(e) => handleEditQuestion(q.id, 'correct', parseInt(e.target.value))}
-                      className="p-2 border rounded mb-4"
-                    >
-                      {q.options.map((_, i) => (
-                        <option key={i} value={i}>{String.fromCharCode(65 + i)}</option>
-                      ))}
-                    </select>
-
-                    <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                      <h4 className="font-bold mb-3">Tujuan Pembelajaran (ABCD)</h4>
+          if (gameStatus === 'editing') {
+            return (
+              <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+                <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-6">Edit Soal & Tujuan Pembelajaran</h2>
+                  
+                  {questions.map((q) => (
+                    <div key={q.id} className="mb-8 p-4 border-2 border-gray-200 rounded-lg">
+                      <h3 className="font-bold text-lg mb-3">Soal {q.id}</h3>
                       
-                      <label className="block mb-1 text-sm font-medium">Audience (Siapa):</label>
-                      <input
-                        type="text"
-                        value={q.tujuanABCD.audience}
-                        onChange={(e) => handleEditTujuan(q.id, 'audience', e.target.value)}
-                        className="w-full p-2 border rounded mb-3"
-                      />
-
-                      <label className="block mb-1 text-sm font-medium">Behavior (Apa yang dilakukan):</label>
+                      <label className="block mb-2 text-sm font-medium">Pertanyaan:</label>
                       <textarea
-                        value={q.tujuanABCD.behavior}
-                        onChange={(e) => handleEditTujuan(q.id, 'behavior', e.target.value)}
-                        className="w-full p-2 border rounded mb-3"
+                        value={q.question}
+                        onChange={(e) => handleEditQuestion(q.id, 'question', e.target.value)}
+                        className="w-full p-2 border rounded mb-4"
                         rows="2"
                       />
 
-                      <label className="block mb-1 text-sm font-medium">Condition (Dalam kondisi apa):</label>
-                      <input
-                        type="text"
-                        value={q.tujuanABCD.condition}
-                        onChange={(e) => handleEditTujuan(q.id, 'condition', e.target.value)}
-                        className="w-full p-2 border rounded mb-3"
-                      />
+                      <label className="block mb-2 text-sm font-medium">Pilihan Jawaban:</label>
+                      {q.options.map((opt, i) => (
+                        <div key={i} className="flex items-center gap-2 mb-2">
+                          <span className="font-medium w-6">{String.fromCharCode(65 + i)}.</span>
+                          <input
+                            type="text"
+                            value={opt}
+                            onChange={(e) => handleEditOption(q.id, i, e.target.value)}
+                            className="flex-1 p-2 border rounded"
+                          />
+                          {i === q.correct && (
+                            <span className="text-green-600 font-bold">✓ Benar</span>
+                          )}
+                        </div>
+                      ))}
 
-                      <label className="block mb-1 text-sm font-medium">Degree (Kriteria keberhasilan):</label>
-                      <input
-                        type="text"
-                        value={q.tujuanABCD.degree}
-                        onChange={(e) => handleEditTujuan(q.id, 'degree', e.target.value)}
-                        className="w-full p-2 border rounded"
-                      />
+                      <label className="block mt-4 mb-2 text-sm font-medium">Jawaban Benar:</label>
+                      <select
+                        value={q.correct}
+                        onChange={(e) => handleEditQuestion(q.id, 'correct', parseInt(e.target.value))}
+                        className="p-2 border rounded mb-4"
+                      >
+                        {q.options.map((_, i) => (
+                          <option key={i} value={i}>{String.fromCharCode(65 + i)}</option>
+                        ))}
+                      </select>
+
+                      <div className="bg-blue-50 p-4 rounded-lg mt-4">
+                        <h4 className="font-bold mb-3">Tujuan Pembelajaran (ABCD)</h4>
+                        
+                        <label className="block mb-1 text-sm font-medium">Audience (Siapa):</label>
+                        <input
+                          type="text"
+                          value={q.tujuanABCD.audience}
+                          onChange={(e) => handleEditTujuan(q.id, 'audience', e.target.value)}
+                          className="w-full p-2 border rounded mb-3"
+                        />
+
+                        <label className="block mb-1 text-sm font-medium">Behavior (Apa yang dilakukan):</label>
+                        <textarea
+                          value={q.tujuanABCD.behavior}
+                          onChange={(e) => handleEditTujuan(q.id, 'behavior', e.target.value)}
+                          className="w-full p-2 border rounded mb-3"
+                          rows="2"
+                        />
+
+                        <label className="block mb-1 text-sm font-medium">Condition (Dalam kondisi apa):</label>
+                        <input
+                          type="text"
+                          value={q.tujuanABCD.condition}
+                          onChange={(e) => handleEditTujuan(q.id, 'condition', e.target.value)}
+                          className="w-full p-2 border rounded mb-3"
+                        />
+
+                        <label className="block mb-1 text-sm font-medium">Degree (Kriteria keberhasilan):</label>
+                        <input
+                          type="text"
+                          value={q.tujuanABCD.degree}
+                          onChange={(e) => handleEditTujuan(q.id, 'degree', e.target.value)}
+                          className="w-full p-2 border rounded"
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
 
-                <button
-                  onClick={() => setGameStatus('playing')}
-                  className="w-full py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition"
-                >
-                  Selesai Edit - Mulai Game
-                </button>
-              </div>
-            </div>
-          );
-        }
-
-        if (gameStatus === 'finished') {
-          const team1Won = ropePosition > 50;
-          const winner = team1Won ? teamNames.team1 : teamNames.team2;
-          
-          return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-              <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full text-center">
-                <Trophy className={`w-20 h-20 mx-auto mb-4 ${team1Won ? 'text-blue-500' : 'text-red-500'}`} />
-                <h2 className="text-3xl font-bold mb-4">
-                  🎉 {winner} Menang! 🎉
-                </h2>
-                <p className="text-xl mb-6">
-                  Skor Akhir: {score.team1} - {score.team2}
-                </p>
-                <div className="space-y-3">
                   <button
-                    onClick={resetGame}
+                    onClick={() => setGameStatus('playing')}
                     className="w-full py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition"
                   >
-                    Main Lagi
+                    Selesai Edit - Mulai Game
                   </button>
+                </div>
+              </div>
+            );
+          }
+
+          if (gameStatus === 'finished') {
+            const team1Won = ropePosition > 50;
+            const winner = team1Won ? teamNames.team1 : teamNames.team2;
+            
+            return (
+              <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+                <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full text-center">
+                  <div className="text-6xl mb-4">{team1Won ? '🏆' : '🏆'}</div>
+                  <h2 className="text-3xl font-bold mb-4">
+                    🎉 {winner} Menang! 🎉
+                  </h2>
+                  <p className="text-xl mb-6">
+                    Skor Akhir: {score.team1} - {score.team2}
+                  </p>
+                  <div className="space-y-3">
+                    <button
+                      onClick={resetGame}
+                      className="w-full py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition"
+                    >
+                      Main Lagi
+                    </button>
+                    <button
+                      onClick={() => setGameStatus('editing')}
+                      className="w-full py-3 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 transition"
+                    >
+                      Edit Soal
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+              <div className="max-w-6xl mx-auto">
+                <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+                  <div className="flex justify-between items-center mb-4">
+                    <h1 className="text-2xl font-bold text-gray-800">Game Tarik Tambang - Fastest Finger ⚡</h1>
+                    <button
+                      onClick={() => setGameStatus('editing')}
+                      className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition text-sm"
+                    >
+                      Edit Soal
+                    </button>
+                  </div>
+                  <p className="text-gray-600 mb-4">Jaringan Komputer & Internet - SMP Kelas 7</p>
+                  
+                  <div className="flex gap-4 mb-4">
+                    <div className="flex-1">
+                      <label className="text-sm text-gray-600">Nama Kelompok 1:</label>
+                      <input
+                        type="text"
+                        value={teamNames.team1}
+                        onChange={(e) => setTeamNames(prev => ({ ...prev, team1: e.target.value }))}
+                        className="w-full p-2 border rounded mt-1"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <label className="text-sm text-gray-600">Nama Kelompok 2:</label>
+                      <input
+                        type="text"
+                        value={teamNames.team2}
+                        onChange={(e) => setTeamNames(prev => ({ ...prev, team2: e.target.value }))}
+                        className="w-full p-2 border rounded mt-1"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between text-lg font-bold">
+                    <span className="text-blue-600">{teamNames.team1}: {score.team1}</span>
+                    <span className="text-gray-500">Soal {currentQuestionIndex + 1}/{questions.length}</span>
+                    <span className="text-red-600">{teamNames.team2}: {score.team2}</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+                  <div className="relative h-24 bg-gray-200 rounded-lg overflow-hidden">
+                    <div 
+                      className="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500"
+                      style={{ width: `${ropePosition}%` }}
+                    />
+                    <div 
+                      className="absolute top-0 right-0 h-full bg-red-500 transition-all duration-500"
+                      style={{ width: `${100 - ropePosition}%` }}
+                    />
+                    <div 
+                      className="absolute top-1/2 -translate-y-1/2 transition-all duration-500 text-4xl"
+                      style={{ left: `${ropePosition}%`, transform: 'translate(-50%, -50%)' }}
+                    >
+                      🎯
+                    </div>
+                  </div>
+                  <div className="flex justify-between mt-2 text-sm font-medium">
+                    <span className="text-blue-600">👥 {teamNames.team1}</span>
+                    <span className="text-red-600">👥 {teamNames.team2}</span>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <div className="bg-white rounded-xl shadow-lg p-6">
+                    <h3 className="text-center font-bold text-xl mb-4 text-blue-600">{teamNames.team1}</h3>
+                    <button
+                      onClick={() => handleBuzz('team1')}
+                      disabled={!canBuzz || buzzedTeam !== null}
+                      className={`w-full h-40 rounded-xl font-bold text-2xl transition-all transform active:scale-95 ${
+                        buzzedTeam === 'team1'
+                          ? 'bg-blue-600 text-white shadow-2xl scale-105'
+                          : canBuzz
+                          ? 'bg-blue-500 hover:bg-blue-600 text-white shadow-lg hover:shadow-2xl'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
+                    >
+                      <div className="text-5xl mb-2">⚡</div>
+                      <div>BUZZ!</div>
+                    </button>
+                    {buzzedTeam === 'team1' && (
+                      <div className="mt-4 p-3 bg-blue-100 text-blue-800 rounded-lg text-center font-bold animate-pulse">
+                        ⚡ Giliran Menjawab!
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="bg-white rounded-xl shadow-lg p-6">
+                    <h3 className="text-center font-bold text-xl mb-4 text-red-600">{teamNames.team2}</h3>
+                    <button
+                      onClick={() => handleBuzz('team2')}
+                      disabled={!canBuzz || buzzedTeam !== null}
+                      className={`w-full h-40 rounded-xl font-bold text-2xl transition-all transform active:scale-95 ${
+                        buzzedTeam === 'team2'
+                          ? 'bg-red-600 text-white shadow-2xl scale-105'
+                          : canBuzz
+                          ? 'bg-red-500 hover:bg-red-600 text-white shadow-lg hover:shadow-2xl'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
+                    >
+                      <div className="text-5xl mb-2">⚡</div>
+                      <div>BUZZ!</div>
+                    </button>
+                    {buzzedTeam === 'team2' && (
+                      <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-lg text-center font-bold animate-pulse">
+                        ⚡ Giliran Menjawab!
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-lg p-6 mb-4">
+                  <h2 className="text-xl font-bold mb-6 text-gray-800 text-center">
+                    {currentQuestion.question}
+                  </h2>
+
+                  <div className="space-y-3">
+                    {currentQuestion.options.map((option, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleAnswer(index)}
+                        disabled={showFeedback || !buzzedTeam}
+                        className={`w-full p-4 rounded-lg text-left font-medium transition-all ${
+                          showFeedback
+                            ? index === currentQuestion.correct
+                              ? 'bg-green-500 text-white'
+                              : index === selectedAnswer
+                              ? 'bg-red-500 text-white'
+                              : 'bg-gray-100 text-gray-400'
+                            : !buzzedTeam
+                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            : 'bg-purple-50 hover:bg-purple-100 text-gray-800 hover:shadow-md'
+                        }`}
+                      >
+                        <span className="font-bold mr-2">{String.fromCharCode(65 + index)}.</span>
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+
+                  {!buzzedTeam && !showFeedback && (
+                    <div className="mt-4 p-4 bg-yellow-50 text-yellow-800 rounded-lg text-center font-medium">
+                      ⏰ Tekan tombol BUZZ untuk mendapat kesempatan menjawab!
+                    </div>
+                  )}
+
+                  {showFeedback && (
+                    <div className={`mt-4 p-4 rounded-lg ${isCorrect ? 'bg-green-50' : 'bg-red-50'}`}>
+                      <p className={`font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}`}>
+                        {isCorrect 
+                          ? `✅ Benar! ${buzzedTeam === 'team1' ? teamNames.team1 : teamNames.team2} menarik tambang!` 
+                          : `❌ Salah! ${buzzedTeam === 'team1' ? teamNames.team2 : teamNames.team1} mendapat kesempatan!`}
+                      </p>
+                    </div>
+                  )}
+
                   <button
-                    onClick={() => setGameStatus('editing')}
-                    className="w-full py-3 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 transition"
+                    onClick={() => setShowTujuan(!showTujuan)}
+                    className="mt-4 text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
                   >
-                    Edit Soal
+                    <span>ℹ️</span>
+                    {showTujuan ? 'Sembunyikan' : 'Lihat'} Tujuan Pembelajaran
                   </button>
+
+                  {showTujuan && (
+                    <div className="mt-3 p-4 bg-blue-50 rounded-lg text-sm">
+                      <h3 className="font-bold mb-2">Tujuan Pembelajaran (ABCD):</h3>
+                      <p><strong>Audience:</strong> {currentQuestion.tujuanABCD.audience}</p>
+                      <p><strong>Behavior:</strong> {currentQuestion.tujuanABCD.behavior}</p>
+                      <p><strong>Condition:</strong> {currentQuestion.tujuanABCD.condition}</p>
+                      <p><strong>Degree:</strong> {currentQuestion.tujuanABCD.degree}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           );
-        }
+        };
 
-        return (
-          <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-            <div className="max-w-6xl mx-auto">
-              {/* Header */}
-              <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h1 className="text-2xl font-bold text-gray-800">Game Tarik Tambang - Fastest Finger ⚡</h1>
-                  <button
-                    onClick={() => setGameStatus('editing')}
-                    className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition text-sm"
-                  >
-                    Edit Soal
-                  </button>
-                </div>
-                <p className="text-gray-600 mb-4">Jaringan Komputer & Internet - SMP Kelas 7</p>
-                
-                {/* Team Names */}
-                <div className="flex gap-4 mb-4">
-                  <div className="flex-1">
-                    <label className="text-sm text-gray-600">Nama Kelompok 1:</label>
-                    <input
-                      type="text"
-                      value={teamNames.team1}
-                      onChange={(e) => setTeamNames(prev => ({ ...prev, team1: e.target.value }))}
-                      className="w-full p-2 border rounded mt-1"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <label className="text-sm text-gray-600">Nama Kelompok 2:</label>
-                    <input
-                      type="text"
-                      value={teamNames.team2}
-                      onChange={(e) => setTeamNames(prev => ({ ...prev, team2: e.target.value }))}
-                      className="w-full p-2 border rounded mt-1"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex justify-between text-lg font-bold">
-                  <span className="text-blue-600">{teamNames.team1}: {score.team1}</span>
-                  <span className="text-gray-500">Soal {currentQuestionIndex + 1}/{questions.length}</span>
-                  <span className="text-red-600">{teamNames.team2}: {score.team2}</span>
-                </div>
-              </div>
-
-              {/* Tug of War Visualization */}
-              <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <div className="relative h-24 bg-gray-200 rounded-lg overflow-hidden">
-                  <div 
-                    className="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500"
-                    style={{ width: `${ropePosition}%` }}
-                  />
-                  <div 
-                    className="absolute top-0 right-0 h-full bg-red-500 transition-all duration-500"
-                    style={{ width: `${100 - ropePosition}%` }}
-                  />
-                  <div 
-                    className="absolute top-1/2 -translate-y-1/2 transition-all duration-500 text-4xl"
-                    style={{ left: `${ropePosition}%`, transform: 'translate(-50%, -50%)' }}
-                  >
-                    🎯
-                  </div>
-                </div>
-                <div className="flex justify-between mt-2 text-sm font-medium">
-                  <span className="text-blue-600">👥 {teamNames.team1}</span>
-                  <span className="text-red-600">👥 {teamNames.team2}</span>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
-                {/* Team 1 Buzz Button */}
-                <div className="bg-white rounded-xl shadow-lg p-6">
-                  <h3 className="text-center font-bold text-xl mb-4 text-blue-600">{teamNames.team1}</h3>
-                  <button
-                    onClick={() => handleBuzz('team1')}
-                    disabled={!canBuzz || buzzedTeam !== null}
-                    className={`w-full h-40 rounded-xl font-bold text-2xl transition-all transform active:scale-95 ${
-                      buzzedTeam === 'team1'
-                        ? 'bg-blue-600 text-white shadow-2xl scale-105'
-                        : canBuzz
-                        ? 'bg-blue-500 hover:bg-blue-600 text-white shadow-lg hover:shadow-2xl'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    }`}
-                  >
-                    <Zap className="inline-block mb-2" size={48} />
-                    <div>BUZZ!</div>
-                  </button>
-                  {buzzedTeam === 'team1' && (
-                    <div className="mt-4 p-3 bg-blue-100 text-blue-800 rounded-lg text-center font-bold animate-pulse">
-                      ⚡ Giliran Menjawab!
-                    </div>
-                  )}
-                </div>
-
-                {/* Team 2 Buzz Button */}
-                <div className="bg-white rounded-xl shadow-lg p-6">
-                  <h3 className="text-center font-bold text-xl mb-4 text-red-600">{teamNames.team2}</h3>
-                  <button
-                    onClick={() => handleBuzz('team2')}
-                    disabled={!canBuzz || buzzedTeam !== null}
-                    className={`w-full h-40 rounded-xl font-bold text-2xl transition-all transform active:scale-95 ${
-                      buzzedTeam === 'team2'
-                        ? 'bg-red-600 text-white shadow-2xl scale-105'
-                        : canBuzz
-                        ? 'bg-red-500 hover:bg-red-600 text-white shadow-lg hover:shadow-2xl'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    }`}
-                  >
-                    <Zap className="inline-block mb-2" size={48} />
-                    <div>BUZZ!</div>
-                  </button>
-                  {buzzedTeam === 'team2' && (
-                    <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-lg text-center font-bold animate-pulse">
-                      ⚡ Giliran Menjawab!
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Question Card */}
-              <div className="bg-white rounded-xl shadow-lg p-6 mb-4">
-                <h2 className="text-xl font-bold mb-6 text-gray-800 text-center">
-                  {currentQuestion.question}
-                </h2>
-
-                <div className="space-y-3">
-                  {currentQuestion.options.map((option, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleAnswer(index)}
-                      disabled={showFeedback || !buzzedTeam}
-                      className={`w-full p-4 rounded-lg text-left font-medium transition-all ${
-                        showFeedback
-                          ? index === currentQuestion.correct
-                            ? 'bg-green-500 text-white'
-                            : index === selectedAnswer
-                            ? 'bg-red-500 text-white'
-                            : 'bg-gray-100 text-gray-400'
-                          : !buzzedTeam
-                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                          : 'bg-purple-50 hover:bg-purple-100 text-gray-800 hover:shadow-md'
-                      }`}
-                    >
-                      <span className="font-bold mr-2">{String.fromCharCode(65 + index)}.</span>
-                      {option}
-                    </button>
-                  ))}
-                </div>
-
-                {!buzzedTeam && !showFeedback && (
-                  <div className="mt-4 p-4 bg-yellow-50 text-yellow-800 rounded-lg text-center font-medium">
-                    ⏰ Tekan tombol BUZZ untuk mendapat kesempatan menjawab!
-                  </div>
-                )}
-
-                {showFeedback && (
-                  <div className={`mt-4 p-4 rounded-lg ${isCorrect ? 'bg-green-50' : 'bg-red-50'}`}>
-                    <p className={`font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}`}>
-                      {isCorrect 
-                        ? `✅ Benar! ${buzzedTeam === 'team1' ? teamNames.team1 : teamNames.team2} menarik tambang!` 
-                        : `❌ Salah! ${buzzedTeam === 'team1' ? teamNames.team2 : teamNames.team1} mendapat kesempatan!`}
-                    </p>
-                  </div>
-                )}
-
-                <button
-                  onClick={() => setShowTujuan(!showTujuan)}
-                  className="mt-4 text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
-                >
-                  <AlertCircle size={16} />
-                  {showTujuan ? 'Sembunyikan' : 'Lihat'} Tujuan Pembelajaran
-                </button>
-
-                {showTujuan && (
-                  <div className="mt-3 p-4 bg-blue-50 rounded-lg text-sm">
-                    <h3 className="font-bold mb-2">Tujuan Pembelajaran (ABCD):</h3>
-                    <p><strong>Audience:</strong> {currentQuestion.tujuanABCD.audience}</p>
-                    <p><strong>Behavior:</strong> {currentQuestion.tujuanABCD.behavior}</p>
-                    <p><strong>Condition:</strong> {currentQuestion.tujuanABCD.condition}</p>
-                    <p><strong>Degree:</strong> {currentQuestion.tujuanABCD.degree}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      };
-
-      export default TugOfWarGame;
-        
-        // Render
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<TugOfWarGame />);
     </script>
